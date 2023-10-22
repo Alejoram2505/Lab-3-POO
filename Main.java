@@ -145,12 +145,9 @@ class Snacks extends Producto {
  */
 class ComidaRapida extends Producto {
     private String tamaño;
-    private String combo;
-
-    public ComidaRapida(String nombre, int cantidadDisponible, String estado, double precio, String tamaño, String combo) {
+    public ComidaRapida(String nombre, int cantidadDisponible, String estado, double precio, String tamaño) {
         super(nombre, cantidadDisponible, estado, precio);
         this.tamaño = tamaño;
-        this.combo = combo;
     }
 
     public String getTamaño() {
@@ -160,66 +157,13 @@ class ComidaRapida extends Producto {
     public void setTamaño(String tamaño) {
         this.tamaño = tamaño;
     }
-
-    public String getCombo() {
-        return combo;
-    }
-
-    public void setCombo(String combo) {
-        this.combo = combo;
-    }
 }
 
 /**
  * Clase que gestiona el inventario de productos y realiza operaciones relacionadas.
  */
-class Tienda {
-    private List<Producto> productos;
-
-    public Tienda() {
-        productos = new ArrayList<>();
-    }
-
-    public void agregarProducto(Producto producto) {
-        productos.add(producto);
-    }
-
-    public Producto buscarProductoPorId(int id) {
-        for (Producto producto : productos) {
-            if (producto.getId() == id) {
-                return producto;
-            }
-        }
-        return null;
-    }
-
-    public List<Producto> listarProductosDeCategoria(String categoria) {
-        List<Producto> productosCategoria = new ArrayList<>();
-        for (Producto producto : productos) {
-            if (producto.getClass().getSimpleName().equalsIgnoreCase(categoria)) {
-                productosCategoria.add(producto);
-            }
-        }
-        return productosCategoria;
-    }
-
-    public double calcularVentasTotales() {
-        double totalVentas = 0;
-        for (Producto producto : productos) {
-            totalVentas += (producto.getPrecio() * producto.getCantidadVendidos());
-        }
-        return totalVentas;
-    }
-
-    public double calcularComisionPorCategoria(String categoria) {
-        double totalVentasCategoria = 0;
-        for (Producto producto : listarProductosDeCategoria(categoria)) {
-            totalVentasCategoria += (producto.getPrecio() * producto.getCantidadVendidos());
-        }
-        return totalVentasCategoria * 0.2; // 20% de comisión
-    }
-
-    public void cargarProductosDesdeArchivoCSV(String archivo) {
+class tienda {
+       public void cargarProductosDesdeArchivoCSV(String archivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -245,9 +189,9 @@ class Tienda {
                         int cantidadDisponible = Integer.parseInt(partes[2].trim());
                         String estado = partes[3].trim();
                         double precio = Double.parseDouble(partes[4].trim());
-                        int gramos = Integer.parseInt(partes[7].trim());
-                        String sabor = partes[8].trim();
-                        String tamaño = partes[9].trim();
+                        int gramos = Integer.parseInt(partes[5].trim());
+                        String sabor = partes[9].trim();
+                        String tamaño = partes[10].trim();
 
                         Snacks snack = new Snacks(nombre, cantidadDisponible, estado, precio, gramos, sabor, tamaño);
                         snack.id = id;
@@ -258,10 +202,9 @@ class Tienda {
                         int cantidadDisponible = Integer.parseInt(partes[2].trim());
                         String estado = partes[3].trim();
                         double precio = Double.parseDouble(partes[4].trim());
-                        String tamaño = partes[7].trim();
-                        String combo = partes[8].trim();
+                        String tamaño = partes[10].trim();
 
-                        ComidaRapida comidaRapida = new ComidaRapida(nombre, cantidadDisponible, estado, precio, tamaño, combo);
+                        ComidaRapida comidaRapida = new ComidaRapida(nombre, cantidadDisponible, estado, precio, tamaño);
                         comidaRapida.id = id;
                         productos.add(comidaRapida);
                     }
@@ -304,16 +247,82 @@ class Tienda {
         }
         return categorias;
     }
+     private List<Producto> productos;
+
+    public tienda() {
+        productos = new ArrayList<>();
+    }
+
+    public void agregarProducto(Producto producto) {
+        productos.add(producto);
+    }
+
+    public Producto buscarProductoPorId(int id) {
+        for (Producto producto : productos) {
+            if (producto.getId() == id) {
+                return producto;
+            }
+        }
+        return null;
+    }
+
+    public List<Producto> listarProductosDeCategoria(String categoria) {
+        List<Producto> productosCategoria = new ArrayList<>();
+        for (Producto producto : productos) {
+            if (producto.getClass().getSimpleName().equalsIgnoreCase(categoria)) {
+                productosCategoria.add(producto);
+            }
+        }
+        return productosCategoria;
+    }
+
+    public double calcularVentasTotales() {
+        double totalVentas = 0;
+        for (Producto producto : productos) {
+            totalVentas += (producto.getPrecio() * producto.getCantidadVendidos());
+        }
+        return totalVentas;
+    }
+
+    public double calcularComisionPorCategoria(String categoria) {
+        double totalVentasCategoria = 0;
+        for (Producto producto : listarProductosDeCategoria(categoria)) {
+            totalVentasCategoria += (producto.getPrecio() * producto.getCantidadVendidos());
+        }
+        return totalVentasCategoria * 0.2; // 20% de comisión
+    }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Tienda tienda = new Tienda();
+        tienda tienda = new tienda();
         tienda.cargarProductosDesdeArchivoCSV("productos.csv");
 
-        // Realiza operaciones con la tienda...
+        // Ejemplo: Buscar un producto por ID
+        int idBuscado = 1; // Reemplaza con el ID deseado
+        Producto productoEncontrado = tienda.buscarProductoPorId(idBuscado);
+        if (productoEncontrado != null) {
+            System.out.println("Producto encontrado: " + productoEncontrado.getNombre());
+        } else {
+            System.out.println("Producto no encontrado.");
+        }
 
+        // Ejemplo: Listar productos de una categoría (reemplaza "Bebidas" con la categoría deseada)
+        String categoriaDeseada = "Bebidas";
+        List<Producto> productosCategoria = tienda.listarProductosDeCategoria(categoriaDeseada);
+        if (!productosCategoria.isEmpty()) {
+            System.out.println("Productos en la categoría " + categoriaDeseada + ":");
+            for (Producto producto : productosCategoria) {
+                System.out.println(producto.getNombre());
+            }
+        } else {
+            System.out.println("No se encontraron productos en la categoría " + categoriaDeseada + ".");
+        }
+
+        // Ejemplo: Mostrar informe con ventas actuales y comisión por categoría
         tienda.mostrarInforme();
     }
 }
+
+
 
