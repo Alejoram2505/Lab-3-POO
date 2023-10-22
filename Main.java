@@ -216,7 +216,7 @@ class tienda {
             e.printStackTrace();
         }
     }
-
+    
     public void mostrarInforme() {
         System.out.println("Listado de categorías con el total de productos:");
         for (String categoria : obtenerCategorias()) {
@@ -249,6 +249,7 @@ class tienda {
         }
         return categorias;
     }
+
      private List<Producto> productos;
 
     public tienda() {
