@@ -1,1 +1,11 @@
-150,coca
+id,nombre,cantidad_disponible,estado,precio,gramos,categoria,mililitros,tipo,sabor,tamaño
+1,agua,14,disponible,5,0,Bebidas,150,agua,,,
+2,lays,10,disponible,4,75,Snacks,0,,barbacoa,,
+3,cheetos,2,disponible,4,60,Snacks,0,,picante,
+4,hamburguesa,7,disponible,20,0,ComidaRapida,0,,,mediana
+5,monster,1,disponible,15,0,Bebidas,200,energetica,,,
+6,chips,13,disponible,7,75,Snacks,0,,picante,,
+7,hotdog,0,nodisponible,15,0,ComidaRapida,0,,,grande,
+8,redbull,20,disponible,12,0,Bebidas,100,energetica,,,
+9,tortrix,3,disponible,1,30,Snacks,0,,natural,,
+10,nachos,5,disponible,20,0,ComidaRapida,0,,,mediana

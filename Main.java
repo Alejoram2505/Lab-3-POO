@@ -68,6 +68,7 @@ class Producto {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+    
 }
 
 /**
@@ -168,10 +169,10 @@ class tienda {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
-                if (partes.length >= 8) {
+                if (partes.length >= 11) {
                     String categoria = partes[6].trim();
 
-                    if (categoria.equalsIgnoreCase("Bebidas") && partes.length >= 10) {
+                    if (categoria.equalsIgnoreCase("Bebidas") && partes.length >= 11) {
                         int id = Integer.parseInt(partes[0].trim());
                         String nombre = partes[1].trim();
                         int cantidadDisponible = Integer.parseInt(partes[2].trim());
@@ -183,7 +184,7 @@ class tienda {
                         Bebidas bebida = new Bebidas(nombre, cantidadDisponible, estado, precio, mililitros, tipo);
                         bebida.id = id;
                         productos.add(bebida);
-                    } else if (categoria.equalsIgnoreCase("Snacks") && partes.length >= 9) {
+                    } else if (categoria.equalsIgnoreCase("Snacks") && partes.length >= 11) {
                         int id = Integer.parseInt(partes[0].trim());
                         String nombre = partes[1].trim();
                         int cantidadDisponible = Integer.parseInt(partes[2].trim());
@@ -196,7 +197,7 @@ class tienda {
                         Snacks snack = new Snacks(nombre, cantidadDisponible, estado, precio, gramos, sabor, tamaño);
                         snack.id = id;
                         productos.add(snack);
-                    } else if (categoria.equalsIgnoreCase("ComidaRapida") && partes.length >= 8) {
+                    } else if (categoria.equalsIgnoreCase("ComidaRapida") && partes.length >= 11) {
                         int id = Integer.parseInt(partes[0].trim());
                         String nombre = partes[1].trim();
                         int cantidadDisponible = Integer.parseInt(partes[2].trim());
@@ -209,6 +210,7 @@ class tienda {
                         productos.add(comidaRapida);
                     }
                 }
+                
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -284,7 +286,7 @@ class tienda {
         return totalVentas;
     }
 
-    public double calcularComisionPorCategoria(String categoria) {
+     public double calcularComisionPorCategoria(String categoria) {
         double totalVentasCategoria = 0;
         for (Producto producto : listarProductosDeCategoria(categoria)) {
             totalVentasCategoria += (producto.getPrecio() * producto.getCantidadVendidos());
@@ -293,32 +295,13 @@ class tienda {
     }
 }
 
+
 public class Main {
     public static void main(String[] args) {
         tienda tienda = new tienda();
         tienda.cargarProductosDesdeArchivoCSV("productos.csv");
 
-        // Ejemplo: Buscar un producto por ID
-        int idBuscado = 1; // Reemplaza con el ID deseado
-        Producto productoEncontrado = tienda.buscarProductoPorId(idBuscado);
-        if (productoEncontrado != null) {
-            System.out.println("Producto encontrado: " + productoEncontrado.getNombre());
-        } else {
-            System.out.println("Producto no encontrado.");
-        }
-
-        // Ejemplo: Listar productos de una categoría (reemplaza "Bebidas" con la categoría deseada)
-        String categoriaDeseada = "Bebidas";
-        List<Producto> productosCategoria = tienda.listarProductosDeCategoria(categoriaDeseada);
-        if (!productosCategoria.isEmpty()) {
-            System.out.println("Productos en la categoría " + categoriaDeseada + ":");
-            for (Producto producto : productosCategoria) {
-                System.out.println(producto.getNombre());
-            }
-        } else {
-            System.out.println("No se encontraron productos en la categoría " + categoriaDeseada + ".");
-        }
-
+        
         // Ejemplo: Mostrar informe con ventas actuales y comisión por categoría
         tienda.mostrarInforme();
     }
